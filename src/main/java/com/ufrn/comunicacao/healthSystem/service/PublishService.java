@@ -24,14 +24,14 @@ import java.util.Arrays;
 @Service
 public class PublishService {
 
-    public ResponseEntity<?> createUpdateContext(ContextEntity contextEntity){
+    public ResponseEntity<?> createUpdateContext(ContextEntity contextEntity, String lat, String lon){
 
         HttpClient httpClient = HttpClients.createDefault();
         HttpPost httpPost;
         String json = new Gson().toJson(contextEntity);
 
-        if(Entities.listUsers.contains(contextEntity.getId())) {
-            Entities.listUsers.add(contextEntity.getId());
+        if(Entities.listUsers.containsKey(contextEntity.getId())) {
+            Entities.listUsers.put(contextEntity.getId(), new Entities.Tuple(lat, lon));
             httpPost = new HttpPost("http://localhost:1026/v1/contextEntities");
         } else {
             httpPost = new HttpPost("http://localhost:1026/v1/updateContext");

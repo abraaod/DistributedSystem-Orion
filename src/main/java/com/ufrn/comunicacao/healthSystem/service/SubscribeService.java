@@ -66,15 +66,17 @@ public class SubscribeService {
     public void sendSseEvent(Object object, int control) {
         List<SseEmitter> deadEmitters = new ArrayList<>();
 
-        JsonObject jsonObject = new JsonParser().parse(new Gson().toJson(object)).getAsJsonObject().getAsJsonArray("contextResponses").get(0).getAsJsonObject().getAsJsonObject("contextElement");
-        String id = jsonObject.get("id").getAsString();
+        JsonObject jsonObject = new JsonParser().parse(new Gson().toJson(object)).getAsJsonObject();
+        String id = jsonObject.getAsJsonArray("contextResponses").get(0).getAsJsonObject().getAsJsonObject("contextElement").get("id").getAsString();;
+        Entities.Tuple<String, String> position = Entities.listUsers.get(id);
+        jsonObject.addProperty("position", position.toString());
 
         switch (control){
             case 0:
                 if(Entities.pressaoEmittersList.containsKey(id)){
                     SseEmitter sseEmitter = Entities.pressaoEmittersList.get(id);
                     try {
-                        sseEmitter.send(object);
+                        sseEmitter.send(jsonObject);
                     } catch (Exception e) {
                         sseEmitter.completeWithError(e);
                         deadEmitters.add(sseEmitter);
@@ -88,7 +90,7 @@ public class SubscribeService {
                 if(Entities.temperaturaEmittersList.containsKey(id)){
                     SseEmitter sseEmitter = Entities.temperaturaEmittersList.get(id);
                     try {
-                        sseEmitter.send(object);
+                        sseEmitter.send(jsonObject);
                     } catch (Exception e) {
                         sseEmitter.completeWithError(e);
                         deadEmitters.add(sseEmitter);
@@ -102,7 +104,7 @@ public class SubscribeService {
                 if(Entities.saturacaoEmittersList.containsKey(id)){
                     SseEmitter sseEmitter = Entities.saturacaoEmittersList.get(id);
                     try {
-                        sseEmitter.send(object);
+                        sseEmitter.send(jsonObject);
                     } catch (Exception e) {
                         sseEmitter.completeWithError(e);
                         deadEmitters.add(sseEmitter);

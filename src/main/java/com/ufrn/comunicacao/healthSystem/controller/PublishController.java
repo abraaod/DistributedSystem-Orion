@@ -15,7 +15,7 @@ public class PublishController {
     private PublishService service;
 
     @PostMapping
-    public ResponseEntity<?> publish(@RequestBody ContextEntity contextEntity){
-        return service.createUpdateContext(contextEntity);
+    public ResponseEntity<?> publish(@RequestParam String lat, @RequestParam String lon, @RequestBody ContextEntity contextEntity){
+        return service.createUpdateContext(contextEntity, lat, lon);
     }
 }

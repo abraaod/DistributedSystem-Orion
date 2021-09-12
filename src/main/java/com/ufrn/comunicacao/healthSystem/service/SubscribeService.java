@@ -71,12 +71,14 @@ public class SubscribeService {
         Entities.Tuple<String, String> position = Entities.listUsers.get(id);
         jsonObject.addProperty("position", position.toString());
 
+        object = new Gson().fromJson(jsonObject, Object.class);
+
         switch (control){
             case 0:
                 if(Entities.pressaoEmittersList.containsKey(id)){
                     SseEmitter sseEmitter = Entities.pressaoEmittersList.get(id);
                     try {
-                        sseEmitter.send(jsonObject);
+                        sseEmitter.send(object);
                     } catch (Exception e) {
                         sseEmitter.completeWithError(e);
                         deadEmitters.add(sseEmitter);
@@ -90,7 +92,7 @@ public class SubscribeService {
                 if(Entities.temperaturaEmittersList.containsKey(id)){
                     SseEmitter sseEmitter = Entities.temperaturaEmittersList.get(id);
                     try {
-                        sseEmitter.send(jsonObject);
+                        sseEmitter.send(object);
                     } catch (Exception e) {
                         sseEmitter.completeWithError(e);
                         deadEmitters.add(sseEmitter);
@@ -104,7 +106,7 @@ public class SubscribeService {
                 if(Entities.saturacaoEmittersList.containsKey(id)){
                     SseEmitter sseEmitter = Entities.saturacaoEmittersList.get(id);
                     try {
-                        sseEmitter.send(jsonObject);
+                        sseEmitter.send(object);
                     } catch (Exception e) {
                         sseEmitter.completeWithError(e);
                         deadEmitters.add(sseEmitter);

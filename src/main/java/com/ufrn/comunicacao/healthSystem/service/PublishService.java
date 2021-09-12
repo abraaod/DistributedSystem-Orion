@@ -30,7 +30,7 @@ public class PublishService {
         HttpPost httpPost;
         String json = new Gson().toJson(contextEntity);
 
-        if(Entities.listUsers.contains(contextEntity.getId())) {
+        if(!Entities.listUsers.contains(contextEntity.getId())) {
             Entities.listUsers.add(contextEntity.getId());
             httpPost = new HttpPost("http://localhost:1026/v1/contextEntities");
         } else {

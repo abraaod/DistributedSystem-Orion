@@ -69,6 +69,8 @@ public class SubscribeService {
         JsonObject jsonObject = new JsonParser().parse(new Gson().toJson(object)).getAsJsonObject().getAsJsonArray("contextResponses").get(0).getAsJsonObject().getAsJsonObject("contextElement");
         String id = jsonObject.get("id").getAsString();
 
+        object = new Gson().fromJson(jsonObject, Object.class);
+
         switch (control){
             case 0:
                 if(Entities.pressaoEmittersList.containsKey(id)){
